@@ -134,7 +134,7 @@ There are notable differences between the RISC-V ISA and the Hardcoded ISA. Belo
 | **SRL R16, R14, R2**| `32'h0030a123`       | `000000000011 00000 010 00001 0100011` | `32'h00271803`           | `000000100010 00000 011 00110 01100000` |
 | **SLL R15, R1, R2** | `32'h002097b3`       | `000000000010 00000 111 01111 0110011` | `32'h00208783`           | `000000100010 00000 111 01111 01100000` |
 
-###VCD Screenshots
+### VCD Screenshots
 
 #### Instruction 1: ADD R6, R2, R1
 <img width="688" alt="Screenshot 2024-08-13 at 12 02 06 PM" src="https://github.com/user-attachments/assets/3c646c0c-418e-477c-9eb3-492b19edcede">
