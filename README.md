@@ -113,5 +113,58 @@ The follwing table shows the analysis of the instructions given in the assignmen
 | **SLL r15, r11, r2** | Performs a logical left shift on r11 by the number of bits specified in r2, storing the result in r15. | R-Type | `0x0025D193` | `0000000 00010 01011 001 01111 0110011` |
 
 
+##Waveform generation
+
+### Hardcoded instruction's waveform screenshot is given below:
+
+`ADD R6, R2, R1`
+
+
+![1](https://github.com/user-attachments/assets/65d3cc6d-3117-4f15-b9e3-d2ac11155402)
+
+`SUB R7, R1, R2`
+
+![Screenshot from 2024-08-13 14-13-27](https://github.com/user-attachments/assets/d10b1df6-22be-40be-84a0-9bf05a92c0d9)
+
+
+`AND R8, R1, R3`
+
+![3](https://github.com/user-attachments/assets/6db988b3-68cc-43b2-b9a8-f5b902b2dcb5)
+
+
+`OR R9, R2, R5`
+
+![4 (1)](https://github.com/user-attachments/assets/e9c4415b-c5bd-4ec7-8550-fa2be426733e)
+
+
+`XOR R10, R1, R4`
+
+![5](https://github.com/user-attachments/assets/58ace97c-f3b3-44f3-b86d-c84a11553560)
+
+
+`SLT R1, R2, R4`
+
+![6](https://github.com/user-attachments/assets/1296dce0-1043-4489-ad2e-46ec68de73d7)
+
+
+`ADDI R12, R4, 5`
+
+
+![7](https://github.com/user-attachments/assets/f37bca18-fa93-4bdb-b082-46a65577422e)
+
+`BEQ R0, R0, 15`
+![8](https://github.com/user-attachments/assets/195784f8-a318-4170-bd81-af43b6a6f77f)
+
+
+
+`SW R3, R1, 2`
+
+![9](https://github.com/user-attachments/assets/0c257e75-eafd-4b64-91df-90cb9354c706)
+
+
+`LW R13, R1, 2`
+
+
+![Screenshot from 2024-08-13 14-35-17](https://github.com/user-attachments/assets/cc2d7115-4e90-453c-b60d-b2c1a048e1a9)
 
 
