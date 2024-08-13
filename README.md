@@ -94,8 +94,7 @@ These are demonstrated in the below screenshot.
 
 ## Instruction type identification
 
-
-### RISC-V Instructions Summary
+The follwing table shows the analysis of the instructions given in the assignment.
 
 | **Instruction**   | **Explanation**                                    | **Type** | **Hex Code** | **32-bit Format**                  |
 |-------------------|---------------------------------------------------|----------|--------------|------------------------------------|
