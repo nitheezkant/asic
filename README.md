@@ -180,7 +180,7 @@ The screenshot shows the following:-
 
 <img width="737" alt="Screenshot 2024-08-15 at 1 49 19 AM" src="https://github.com/user-attachments/assets/edb16809-50cd-4839-9793-7ca3f185e46d">
 
-# Tak 5
+# Task 5
 
 Baisc Risc-V processor core using TL-Verilog on Makerchip.
 
