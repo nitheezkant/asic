@@ -240,9 +240,9 @@ This can now be compared to the makerchip waveform given below.
 local simulation
 <img width="1440" alt="Screenshot 2024-09-14 at 1 07 13 AM" src="https://github.com/user-attachments/assets/3c2f80a0-2ae9-4e89-a051-8a8fda52418b">
 
-# Slides
+# Slides for Task of 3rd September 
 
-[Nitheezkant.pdf](https://github.com/user-attachments/files/16999251/Your.title.here.pdf)
+[Nitheezkant_R.pdf](https://github.com/user-attachments/files/16999251/Your.title.here.pdf)
 
 
 # Video (Private)
