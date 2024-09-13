@@ -242,8 +242,10 @@ local simulation
 
 # Slides
 
-[Your title here.pdf](https://github.com/user-attachments/files/16999251/Your.title.here.pdf)
+[Nitheezkant.pdf](https://github.com/user-attachments/files/16999251/Your.title.here.pdf)
 
 
+# Video (Private)
 
+https://drive.google.com/file/d/1etW8sFwG9FU7RaxZOxfgOIVtonqyHWGz/view?usp=sharing
 
