@@ -237,6 +237,13 @@ This can now be compared to the makerchip waveform given below.
 <img width="1609" alt="Screenshot 2024-08-21 at 11 27 49 PM" src="https://github.com/user-attachments/assets/b561ca88-c133-4b5f-84c2-78187da1b22c">
 <img width="1084" alt="Screenshot 2024-08-21 at 11 28 20 PM" src="https://github.com/user-attachments/assets/ff9bc241-c7bd-4d69-b236-17b99a05de83">
 
+local simulation
+<img width="1440" alt="Screenshot 2024-09-14 at 1 07 13 AM" src="https://github.com/user-attachments/assets/3c2f80a0-2ae9-4e89-a051-8a8fda52418b">
+
+# Slides
+
+[Your title here.pdf](https://github.com/user-attachments/files/16999251/Your.title.here.pdf)
+
 
 
 
