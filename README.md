@@ -355,13 +355,75 @@ Setup
 
 <img width="1081" alt="Screenshot 2024-11-04 at 10 05 06 PM" src="https://github.com/user-attachments/assets/713270ee-8568-4111-953d-1be8d729e3c3">
 
+# Task 9
 
+Post Synthesis Static Timing Analysis using OpenSTA for all the sky130 lib files
 
-create a sta_pvt.tcl file and copy the below
+Create a sta_pvt.tcl file and copy the Following
 
+```
+set list_of_lib_files(1) "sky130_fd_sc_hd__ff_100C_1v65.lib"
+set list_of_lib_files(2) "sky130_fd_sc_hd__ff_100C_1v95.lib"
+set list_of_lib_files(3) "sky130_fd_sc_hd__ff_n40C_1v56.lib"
+set list_of_lib_files(4) "sky130_fd_sc_hd__ff_n40C_1v65.lib"
+set list_of_lib_files(5) "sky130_fd_sc_hd__ff_n40C_1v76.lib"
+set list_of_lib_files(6) "sky130_fd_sc_hd__ff_n40C_1v95.lib"
+set list_of_lib_files(7) "sky130_fd_sc_hd__ff_n40C_1v95_ccsnoise.lib.part1"
+set list_of_lib_files(8) "sky130_fd_sc_hd__ff_n40C_1v95_ccsnoise.lib.part2"
+set list_of_lib_files(9) "sky130_fd_sc_hd__ff_n40C_1v95_ccsnoise.lib.part3"
+set list_of_lib_files(10) "sky130_fd_sc_hd__ss_100C_1v40.lib"
+set list_of_lib_files(11) "sky130_fd_sc_hd__ss_100C_1v60.lib"
+set list_of_lib_files(12) "sky130_fd_sc_hd__ss_n40C_1v28.lib"
+set list_of_lib_files(13) "sky130_fd_sc_hd__ss_n40C_1v35.lib"
+set list_of_lib_files(14) "sky130_fd_sc_hd__ss_n40C_1v40.lib"
+set list_of_lib_files(15) "sky130_fd_sc_hd__ss_n40C_1v44.lib"
+set list_of_lib_files(16) "sky130_fd_sc_hd__ss_n40C_1v60.lib"
+set list_of_lib_files(17) "sky130_fd_sc_hd__ss_n40C_1v60_ccsnoise.lib.part1"
+set list_of_lib_files(18) "sky130_fd_sc_hd__ss_n40C_1v60_ccsnoise.lib.part2"
+set list_of_lib_files(19) "sky130_fd_sc_hd__ss_n40C_1v60_ccsnoise.lib.part3"
+set list_of_lib_files(20) "sky130_fd_sc_hd__ss_n40C_1v76.lib"
+set list_of_lib_files(21) "sky130_fd_sc_hd__tt_025C_1v80.lib"
+set list_of_lib_files(22) "sky130_fd_sc_hd__tt_100C_1v80.lib"
 
+for {set i 1} {$i <= [array size list_of_lib_files]} {incr i} {
+read_liberty ./timing_libs/$list_of_lib_files($i)
+read_verilog ../output/synth/vsdbabysoc.synth.v
+link_design vsdbabysoc
+read_sdc ./sdc/vsdbabysoc_synthesis.sdc
+check_setup -verbose
+report_checks -path_delay min_max -fields {nets cap slew input_pins fanout} -digits {4} > ./sta_output/min_max_$list_of_lib_files($i).txt
 
+}
+```
 
+<img width="1680" alt="Screenshot 2024-11-04 at 10 40 54 PM" src="https://github.com/user-attachments/assets/9756bc48-7012-4623-9cf1-86f3a04ff936">
 
+Enter the following commands
+
+```
+cd VSDBabySoC/src
+sta
+source sta_pvt.tcl
+```
+
+<img width="1680" alt="Screenshot 2024-11-04 at 10 43 58 PM" src="https://github.com/user-attachments/assets/54dba85b-b041-40b0-bb60-0e7b01256d0f">
+
+Generated Files:
+
+<img width="1680" alt="Screenshot 2024-11-04 at 10 44 49 PM" src="https://github.com/user-attachments/assets/d9b5fb2d-b986-48ac-8b79-ba45b2896ac0">
+
+One of them:
+
+<img width="1680" alt="Screenshot 2024-11-04 at 10 47 36 PM" src="https://github.com/user-attachments/assets/eee80739-5991-4946-86d2-5646f47799e9">
+
+All values transfered to excel:
+
+<img width="977" alt="Screenshot 2024-11-04 at 11 25 48 PM" src="https://github.com/user-attachments/assets/871c2156-3cc5-49f2-bc34-97f4062bb4d6">
+
+Graphs:
+
+<img width="1211" alt="Screenshot 2024-11-04 at 11 40 51 PM" src="https://github.com/user-attachments/assets/70407b2d-f33f-476e-9f36-f773b1ae8eb9">
+
+![Uploading Screenshot 2024-11-04 at 11.45.31 PM.png…]()
 
 
