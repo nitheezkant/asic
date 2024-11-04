@@ -1,4 +1,4 @@
-
+<img width="1207" alt="Screenshot 2024-11-04 at 11 45 31 PM" src="https://github.com/user-attachments/assets/484bf1d9-5fdb-4ffc-a855-b1a13fd054e2">
 
 # Task 1 
 ## Compiling a C program using GCC and RISC-V
@@ -424,6 +424,7 @@ Graphs:
 
 <img width="1211" alt="Screenshot 2024-11-04 at 11 40 51 PM" src="https://github.com/user-attachments/assets/70407b2d-f33f-476e-9f36-f773b1ae8eb9">
 
-![Uploading Screenshot 2024-11-04 at 11.45.31 PM.png…]()
+<img width="1207" alt="Screenshot 2024-11-04 at 11 45 31 PM" src="https://github.com/user-attachments/assets/d1a89d02-886a-4c53-8922-6b9872360e93">
+
 
 
