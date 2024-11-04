@@ -249,3 +249,119 @@ local simulation
 
 https://drive.google.com/file/d/1etW8sFwG9FU7RaxZOxfgOIVtonqyHWGz/view?usp=sharing
 
+# Task 7
+
+To Synthesize RISC-V and compare output with functional simulations.
+
+Copy the src folder from your VSDBabySoC folder to sky130RTLDesignAndSynthesisWorkshop.
+
+## Synthesis: 
+
+Enter the following commands
+
+```
+yosys
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog clk_gate.v
+read_verilog rvmyth.v
+synth -top rvmyth
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+write_verilog -noattr rvmyth_net.v
+!gedit rvmyth_net.v
+exit
+
+```
+<img width="1680" alt="Screenshot 2024-11-04 at 7 59 25 PM" src="https://github.com/user-attachments/assets/b8a4ca01-8a21-4caa-81b8-40d358570ca2">
+<img width="1680" alt="Screenshot 2024-11-04 at 8 00 07 PM" src="https://github.com/user-attachments/assets/8076c654-3a03-4a8c-a057-ded49953a42e">
+
+### Simulation
+
+Enter the following commands
+
+```
+iverilog ../../my_lib/verilog_model/primitives.v ../../my_lib/verilog_model/sky130_fd_sc_hd.v rvmyth.v testbench.v vsdbabysoc.v avsddac.v avsdpll.v clk_gate.v
+./a.out
+gtkwave dump.vcd
+```
+
+<img width="1680" alt="Screenshot 2024-11-04 at 8 36 42 PM" src="https://github.com/user-attachments/assets/fdccaa89-649b-414b-99ee-817656c6bc0b">
+
+## Functional Simulation:
+
+Enter the following commands
+
+ ```
+cd ~
+cd VSDBabySoC
+iverilog -o ./pre_synth_sim.out -DPRE_SYNTH_SIM src/module/testbench.v -I src/include -I src/module/
+./pre_synth_sim.out
+gtkwave pre_synth_sim.vcd
+```
+
+<img width="1680" alt="Screenshot 2024-11-04 at 8 38 16 PM" src="https://github.com/user-attachments/assets/dd591c7c-9f86-4dc6-bf52-b053e61b1780">
+
+
+## Comparision of waveforms
+
+Here is clear comparion of waveform, verfing that the waveform is the same.
+
+<img width="1680" alt="Screenshot 2024-11-04 at 8 37 45 PM" src="https://github.com/user-attachments/assets/57d08924-bf21-415c-94ff-f3f848a6719c">
+
+# Task 8 
+
+Post Synthesis Static Timing Analysis using OpenSTA.
+
+Change the of VSDBabySoc/src/sdc/vsdbabysoc_synthesis.sdc to:
+
+```
+set PERIOD 11.45
+set_units -time ns
+create_clock [get_pins {pll/CLK}] -name clk -period $PERIOD
+set_clock_uncertainty -setup  [expr $PERIOD * 0.05] [get_clocks clk]
+set_clock_transition [expr $PERIOD * 0.05] [get_clocks clk]
+set_clock_uncertainty -hold [expr $PERIOD * 0.08] [get_clocks clk]
+set_input_transition [expr $PERIOD * 0.08] [get_ports ENb_CP]
+set_input_transition [expr $PERIOD * 0.08] [get_ports ENb_VCO]
+set_input_transition [expr $PERIOD * 0.08] [get_ports REF]
+set_input_transition [expr $PERIOD * 0.08] [get_ports VCO_IN]
+set_input_transition [expr $PERIOD * 0.08] [get_ports VREFH]
+```
+
+<img width="1680" alt="Screenshot 2024-11-04 at 10 11 56 PM" src="https://github.com/user-attachments/assets/9021a8c2-da82-4121-9a52-494598c95d70">
+
+Enter the following commands
+
+```
+cd VSDBabySoc/src
+sta
+read_liberty -min ./lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_liberty -min ./lib/avsdpll.lib
+read_liberty -min ./lib/avsddac.lib
+read_liberty -max ./lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_liberty -max ./lib/avsdpll.lib
+read_liberty -max ./lib/avsddac.lib
+read_verilog ../output/synth/vsdbabysoc.synth.v
+link_design vsdbabysoc
+read_sdc ./sdc/vsdbabysoc_synthesis.sdc
+report_checks -path_delay min_max -format full_clock_expanded -digits 4
+```
+
+Hold 
+
+<img width="1479" alt="Screenshot 2024-11-04 at 10 04 50 PM" src="https://github.com/user-attachments/assets/d4119cec-8c27-4070-89aa-909e7a1deeee">
+
+Setup
+
+<img width="1081" alt="Screenshot 2024-11-04 at 10 05 06 PM" src="https://github.com/user-attachments/assets/713270ee-8568-4111-953d-1be8d729e3c3">
+
+
+
+create a sta_pvt.tcl file and copy the below
+
+
+
+
+
+
+
