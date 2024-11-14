@@ -1,4 +1,5 @@
-<img width="1207" alt="Screenshot 2024-11-04 at 11 45 31 PM" src="https://github.com/user-attachments/assets/484bf1d9-5fdb-4ffc-a855-b1a13fd054e2">
+<details>
+  <summary> Old tasks</summary>
 
 # Task 1 
 ## Compiling a C program using GCC and RISC-V
@@ -426,11 +427,14 @@ Graphs:
 
 <img width="1207" alt="Screenshot 2024-11-04 at 11 45 31 PM" src="https://github.com/user-attachments/assets/d1a89d02-886a-4c53-8922-6b9872360e93">
 
-# Task 10
+</details>
+
+# Task 10: Advanced Physical Design using OpenLane using Sky130
 
 
 
-# Day 1
+<details>
+  <summary> Day 1</summary>
 
 
 
@@ -657,8 +661,10 @@ gedit 1-yosys_4.stat.rpt
 
 
 ```
+</details>
 
-# Day 2 
+<details>
+  <summary> Day 2</summary>
 
 ## **Core Concepts in IC Floorplanning**
 
@@ -850,7 +856,10 @@ $$
 \text{Rise Transition Time} = \text{time(slew-high-rise-thr)} - \text{time(slew-low-rise-thr)}
 $$
 
-# Day 3 
+</details>
+
+<details>
+  <summary> Day 3</summary>
 
 A CMOS inverter, consisting of a PMOS and NMOS transistor, is one of the fundamental components in digital circuits. The circuit switches between high and low output states based on the input voltage level. This guide includes details on how to model and simulate this behavior in SPICE.
 
@@ -1152,23 +1161,31 @@ plot y vs time a
 
  2.2403 ns - 2.17871 ns = 0.06159 ns  
  
+ ---
+ 
 **Fall Time**       
 
 ![image](https://github.com/user-attachments/assets/babb3168-40ff-4e09-8220-667a49913ca3)
 
-4.096 ns - 4.05075 ns = 0.04525 ns     
+4.096 ns - 4.05075 ns = 0.04525 ns    
+
+---
 
 **Cell Rise Delay** 
 
 ![Screenshot 2024-11-13 180725](https://github.com/user-attachments/assets/80c3d6e3-3078-461f-bea3-9feb61f3e77f)
 
-2.20556 ns - 2.15 ns = 0.05556 ns          
+2.20556 ns - 2.15 ns = 0.05556 ns    
+
+---
 
 **Cell Fall Delay** 
 
 ![Screenshot 2024-11-13 180833](https://github.com/user-attachments/assets/b4d6db04-6d16-48c3-a9cc-0091dd0ce6b1)
 
-4.07761 ns - 4.04776 ns = 0.02985 ns                 
+4.07761 ns - 4.04776 ns = 0.02985 ns     
+
+---
 
 ### 5. DRC Rules in Magic
 
@@ -1203,7 +1220,10 @@ spacing npres allpolynonres 480 touching_illegal \
     ```
 ![Screenshot 2024-11-13 182916](https://github.com/user-attachments/assets/c8c5fb4d-7deb-4dfa-a87c-a32d9436db23)
 
-# Day 4
+</details>
+
+<details>
+  <summary> Day 4</summary>
 
 ### 1. **Extracting the `tracks.info` File**
 
@@ -1359,12 +1379,15 @@ magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs
 
 
 To view the specific inverter cell in Magic:
+
 - Select the cell by clicking on it.
 - In the console, type `expand`.
 
 **Expanded Inverter Cell:**
-	![Screenshot 2024-11-14 123352](https://github.com/user-attachments/assets/61f6d9ec-ca62-413a-8d84-40cbcd76d1d1)
 
+![Screenshot 2024-11-14 123352](https://github.com/user-attachments/assets/7cf7e793-d7c9-4f54-8808-6a81f72694dc)
+
+	
 ### 9. **Timing Analysis with Ideal Clocks Using OpenSTA**
 
 In pre-layout STA, clock buffer effects and net delays are considered, with wire delays estimated using the PDK library wire model. The initial synthesis run may exhibit notable timing violations, whereas an optimized timing run aims to achieve zero WNS (Worst Negative Slack). In this phase, we conduct timing analysis on the initial synthesis to identify potential optimization areas.
@@ -1599,8 +1622,9 @@ exit
 
 ![Screenshot 2024-11-14 121659](https://github.com/user-attachments/assets/40f936ed-ddb4-4e44-a0e9-2a05800a6df8)
 
-   
-# Day 5
+</details>
+<details>
+  <summary> Day 5</summary>
 
 #### Maze Routing and Lee's Algorithm
 
@@ -1715,3 +1739,4 @@ read_spef /openLANE_flow/designs/picorv32a/runs/13-11_15-43/results/routing/pico
 report_checks -path_delay min_max -fields {slew trans net cap input_pins} -format full_clock_expanded -digits 4
 exit
 ```
+</details>
