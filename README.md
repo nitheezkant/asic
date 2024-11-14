@@ -427,11 +427,238 @@ Graphs:
 <img width="1207" alt="Screenshot 2024-11-04 at 11 45 31 PM" src="https://github.com/user-attachments/assets/d1a89d02-886a-4c53-8922-6b9872360e93">
 
 # Task 10
+
+
+
 # Day 1
 
-A **QFN-48 Package** (Quad Flat No-leads with 48 connections) is a type of IC packaging that places 48 metal connection pads around the perimeter of the chip without any protruding leads, creating a compact, low-profile package. This design offers high thermal efficiency and superior electrical performance, making it well-suited for densely packed applications where space is limited and effective heat dissipation is needed.
+
+
+**QFN-48 Package**: The QFN-48 is a small, leadless package featuring 48 connection pads around its edge, offering superior thermal and electrical performance, making it well-suited for high-density applications.
+
 
 
 ![image](https://github.com/user-attachments/assets/16181d9a-b323-4d03-b7ca-c8128211a197)
+
+![image](https://github.com/user-attachments/assets/322fa2e2-b826-47b9-a309-96f7a855f8b4)
+
+
+A **Chip**, also known as an integrated circuit (IC), is composed of various functional components—such as memory, processing units, and input/output (I/O) interfaces—integrated into a silicon base. Chips are designed for specific electronic functions, including processing, data storage, communication, and control.
+
+**Pads**: Small metal contact points on a chip or its package, used to link the internal circuitry to external connections, allowing for signal transmission.
+
+**Core**: The primary processing unit within a chip, housing the functional logic optimized for performance and power efficiency.
+
+**Die**: The part of a silicon wafer that holds a single IC before it is packaged, containing all the active circuitry of the chip.
+
+### From Software Applications to Hardware Execution
+
+For an application to run on hardware, the software must be converted from a high-level programming language into binary code that the hardware can understand:
+
+
+![image](https://github.com/user-attachments/assets/7aea1b28-4cc7-412a-8cb9-f239140808fb)
+
+
+1. **System Software Translation**: The system software layer converts high-level code into machine language. The Operating System (OS), compiler, and assembler are integral to this conversion process.
+
+2. **Execution Process**:
+   - The **OS** interprets and organizes high-level application functions written in languages such as C, C++, or Java.
+   - The **Compiler** translates the high-level code into low-level, architecture-specific instructions optimized for the hardware being used (e.g., x86, ARM, RISC-V).
+   - The **Assembler** then transforms these instructions into binary (machine code) that the hardware can understand and execute.
+   - The **Hardware** ultimately runs these instructions, carrying out the tasks as specified by the program.
+
+![image](https://github.com/user-attachments/assets/4f593b79-d6b1-496c-8231-fa017b4bc7ce)
+
+**Example**: Take a stopwatch application running on a RISC-V core as an example. The OS processes a function written in C, which is then compiled into RISC-V-specific assembly instructions. The assembler translates these into binary code, and the hardware executes it, delivering the stopwatch functionality.
+
+![image](https://github.com/user-attachments/assets/3d7f7f44-a1ae-4605-9e2c-5b2fe3206022)
+
+3. **Hardware Translation to Layout**: In hardware design, the RTL (Register Transfer Level) defines the functionality using an HDL (Hardware Description Language) like Verilog. This is then synthesized into a netlist of gates, which are subsequently mapped onto a physical layout, ultimately forming the chip.
+
+---
+
+### ASIC Design Flow Overview
+
+The process of designing an ASIC (Application-Specific Integrated Circuit) involves multiple stages, progressing from a high-level description to a final physical layout ready for fabrication:
+
+![image](https://github.com/user-attachments/assets/a7589d94-48cd-4e09-92fd-38594a79c7a9)
+
+1. **RTL Design**: Specifies the intended logic and functionality of the circuit in Verilog or VHDL. This high-level code outlines data paths, logic operations, and the interactions between different chip components.
+
+2. **RTL Synthesis**: Converts the RTL code into a gate-level netlist, which includes standard cells such as AND gates, multiplexers, and flip-flops. Optimization steps focus on area, power, and timing constraints to ensure efficient performance.
+
+3. **Floor and Power Planning**: This phase involves arranging the major functional blocks of the chip on the silicon die and defining the power distribution network. Proper floorplanning minimizes signal delays and enhances power efficiency by positioning components optimally.
+
+4. **Placement**: Determines the physical locations of all cells and modules, minimizing wiring length and ensuring compliance with design constraints. Optimal placement balances performance, area, and power.
+
+5. **Clock Tree Synthesis (CTS)**: CTS designs a clock distribution network to uniformly deliver the clock signal to all registers and flip-flops, minimizing clock skew and ensuring accurate timing across the chip.
+
+6. **Routing**: Connects all components using metal layers, focusing on signal integrity and minimizing congestion. Routing tools prioritize paths that reduce resistance and signal delay while adhering to design rules.
+
+7. **Sign-off**: This phase verifies the design for functionality, performance, power consumption, and manufacturability. Checks include timing analysis (ensuring setup and hold times are met), power analysis, and physical verification to confirm compliance with manufacturing constraints.
+
+8. **GDSII File Generation**: The final layout is exported in the GDSII format, which serves as the blueprint for chip manufacturing. The GDSII file contains all necessary information to create the photomasks for the chip fabrication process.
+
+---
+
+### OpenLane ASIC Flow
+
+OpenLane is an open-source ASIC design flow that integrates various open-source tools for each stage of the ASIC development process:
+
+![image](https://github.com/user-attachments/assets/914dcbf2-4303-42ed-bbc4-38f29b621be4)
+
+1. **RTL Synthesis, Technology Mapping, and Formal Verification**: Yosys is used for RTL synthesis, ABC handles technology mapping and formal verification.
+2. **Static Timing Analysis**: OpenSTA is used to perform timing verification.
+3. **Floor Planning**: Tools include init_fp for initial floor planning, ioPlacer for I/O placement, pdn for power grid planning, and tapcell for inserting tap cells to manage well contacts.
+4. **Placement**: This step includes global placement with RePLace, optional cell resizing with Resizer, and detailed placement using OpenDP.
+5. **Clock Tree Synthesis**: TritonCTS is used to build a balanced clock tree.
+6. **Fill Insertion**: OpenDP manages the insertion of filler cells to ensure uniform chip density.
+7. **Routing**: FastRoute handles global routing, while TritonRoute performs detailed routing for the chip.
+8. **SPEF Extraction**: OpenRCX extracts Standard Parasitic Exchange Format (SPEF) data used for timing analysis.
+9. **GDSII Streaming Out**: Magic and KLayout are used to generate and visualize the final layout.
+10. **Design Rule Checking (DRC)**: Magic and KLayout also perform design rule checks to verify the design adheres to manufacturing constraints.
+11. **Layout vs. Schematic (LVS) Check**: Netgen ensures the layout matches the schematic for consistency.
+12. **Antenna Checks**: Magic checks for antenna effects, ensuring the design is reliable.
+
+---
+
+### OpenLane Directory Structure
+
+The OpenLane directory structure is designed to facilitate open-source ASIC design, supporting PDK (Process Design Kit) integration:
+
+```
+├── OpenLane             -> Main directory to invoke tools (run docker first)
+│   ├── designs          -> Holds all design files for the flow
+│   │   ├── picorv32a    -> Example design used in workshops or tutorials
+│   │   ├── ...          -> Additional designs
+├── pdks                 -> Stores PDK-related files, supporting open-source tools
+│   ├── skywater-pdk     -> Contains the Skywater 130nm PDK
+│   ├── open-pdks        -> Scripts to adapt commercial PDKs for open-source tools
+│   ├── sky130A          -> Variant of PDK with open-source compatibility
+│   │   ├── libs.ref     -> Node-specific files (e.g., timing libraries, cell LEF files)
+│   │   ├── libs.tech    -> Tool-specific files for KLayout, Netgen, Magic, etc.
+```
+
+
+This directory structure ensures compatibility with open-source EDA tools by organizing files specific to each design, technology node, and tool.
+
+### OpenLane Synthesis Process for `picorv32a` Design
+
+### **1. Open the OpenLane Directory**
+   - Navigate to the OpenLane working directory within the VSD Virtual Box:
+     ```bash
+     cd Desktop/work/tools/openlane_working_dir/openlane
+     docker
+     ./flow.tcl -interactive
+     ```
+
+### **2. Launch OpenLane in Interactive Mode**
+   - Start the Docker container and enter OpenLane's interactive mode:
+     ```bash
+     package require openlane 0.9
+     prep -design picorv32a
+     run_synthesis
+     ```
+![Screenshot 2024-11-13 135630](https://github.com/user-attachments/assets/09577795-96cf-4dfb-ab95-eba7f7723a0b)
+
+### Viewing the Netlist
+   - After synthesis completes, go to the folder containing the netlist:
+     ```bash
+     cd designs/picorv32a/runs/13-11_15-43/results/synthesis/
+     gedit picorv32a.synthesis.v
+     ```
+---
+![Screenshot 2024-11-13 140133](https://github.com/user-attachments/assets/6e6e3b04-bcfd-43ab-bb71-6e2c9d0b67a7)
+
+### Viewing the Yosys Report
+```bash
+cd ../..
+cd reports/synthesis
+gedit 1-yosys_4.stat.rpt
+```
+
+![Screenshot 2024-11-13 140451](https://github.com/user-attachments/assets/dd672aa4-5b7b-46ba-b504-7fa4c4c38458)
+
+28. Printing statistics.
+
+
+```
+
+=== picorv32a ===
+
+   Number of wires:              14596
+   Number of wire bits:          14978
+   Number of public wires:        1565
+   Number of public wire bits:    1947
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:              14876
+     sky130_fd_sc_hd__a2111o_2       1
+     sky130_fd_sc_hd__a211o_2       35
+     sky130_fd_sc_hd__a211oi_2      60
+     sky130_fd_sc_hd__a21bo_2      149
+     sky130_fd_sc_hd__a21boi_2       8
+     sky130_fd_sc_hd__a21o_2        57
+     sky130_fd_sc_hd__a21oi_2      244
+     sky130_fd_sc_hd__a221o_2       86
+     sky130_fd_sc_hd__a22o_2      1013
+     sky130_fd_sc_hd__a2bb2o_2    1748
+     sky130_fd_sc_hd__a2bb2oi_2     81
+     sky130_fd_sc_hd__a311o_2        2
+     sky130_fd_sc_hd__a31o_2        49
+     sky130_fd_sc_hd__a31oi_2        7
+     sky130_fd_sc_hd__a32o_2        46
+     sky130_fd_sc_hd__a41o_2         1
+     sky130_fd_sc_hd__and2_2       157
+     sky130_fd_sc_hd__and3_2        58
+     sky130_fd_sc_hd__and4_2       345
+     sky130_fd_sc_hd__and4b_2        1
+     sky130_fd_sc_hd__buf_1       1656
+     sky130_fd_sc_hd__buf_2          8
+     sky130_fd_sc_hd__conb_1        42
+     sky130_fd_sc_hd__dfxtp_2     1613
+     sky130_fd_sc_hd__inv_2       1615
+     sky130_fd_sc_hd__mux2_1      1224
+     sky130_fd_sc_hd__mux2_2         2
+     sky130_fd_sc_hd__mux4_1       221
+     sky130_fd_sc_hd__nand2_2       78
+     sky130_fd_sc_hd__nor2_2       524
+     sky130_fd_sc_hd__nor2b_2        1
+     sky130_fd_sc_hd__nor3_2        42
+     sky130_fd_sc_hd__nor4_2         1
+     sky130_fd_sc_hd__o2111a_2       2
+     sky130_fd_sc_hd__o211a_2       69
+     sky130_fd_sc_hd__o211ai_2       6
+     sky130_fd_sc_hd__o21a_2        54
+     sky130_fd_sc_hd__o21ai_2      141
+     sky130_fd_sc_hd__o21ba_2      209
+     sky130_fd_sc_hd__o21bai_2       1
+     sky130_fd_sc_hd__o221a_2      204
+     sky130_fd_sc_hd__o221ai_2       7
+     sky130_fd_sc_hd__o22a_2      1312
+     sky130_fd_sc_hd__o22ai_2       59
+     sky130_fd_sc_hd__o2bb2a_2     119
+     sky130_fd_sc_hd__o2bb2ai_2     92
+     sky130_fd_sc_hd__o311a_2        8
+     sky130_fd_sc_hd__o31a_2        19
+     sky130_fd_sc_hd__o31ai_2        1
+     sky130_fd_sc_hd__o32a_2       109
+     sky130_fd_sc_hd__o41a_2         2
+     sky130_fd_sc_hd__or2_2       1088
+     sky130_fd_sc_hd__or2b_2        25
+     sky130_fd_sc_hd__or3_2         68
+     sky130_fd_sc_hd__or3b_2         5
+     sky130_fd_sc_hd__or4_2         93
+     sky130_fd_sc_hd__or4b_2         6
+     sky130_fd_sc_hd__or4bb_2        2
+
+   Chip area for module '\picorv32a': 147712.918400
+
+
+```
+
+
+
 
 
