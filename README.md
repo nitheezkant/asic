@@ -850,7 +850,311 @@ $$
 \text{Rise Transition Time} = \text{time(slew-high-rise-thr)} - \text{time(slew-low-rise-thr)}
 $$
 
+# Day 3 
 
+A CMOS inverter, consisting of a PMOS and NMOS transistor, is one of the fundamental components in digital circuits. The circuit switches between high and low output states based on the input voltage level. This guide includes details on how to model and simulate this behavior in SPICE.
+
+---
+
+## SPICE Deck Structure
+
+### 1. **Netlist Creation**
+
+The netlist defines the interconnections between the components (PMOS and NMOS transistors) in the inverter circuit. Below is a sample netlist structure for a CMOS inverter with labeled nodes for easy identification:
+
+- **Input Node:** Input signal (IN)
+- **Output Node:** Output of the inverter (OUT)
+- **Power Supply Node:** Connected to VDD
+- **Ground Node:** Connected to GND
+
+Example of transistor description syntax:
+```spice
+[component name] [drain] [gate] [source] [substrate] [transistor type] W=[width] L=[length]
+```
+
+### 2. **Device Sizing**
+
+The width-to-length (W/L) ratio of the PMOS and NMOS transistors is a critical factor in determining the drive strength and performance of a CMOS inverter. To ensure proper switching behavior, it's important to size the transistors appropriately. Typically, the PMOS transistor is sized with a **W/L ratio 2x to 3x** greater than the NMOS transistor to account for the different mobility of electrons and holes in the materials.
+
+Example transistor sizing:
+
+```spice
+M1 OUT IN VDD VDD PMOS W=2u L=0.25u
+M2 OUT IN GND GND NMOS W=1u L=0.25u
+```
+### 3. **Voltage Levels**
+
+Define the gate input voltage and supply voltage (VDD). Modify the levels to match the design specifications; here, we use 2.5V as the supply voltage reference.
+
+Example:
+```spice
+Vin IN 0 DC 0V
+VDD VDD 0 DC 2.5V
+```
+
+### 4. **Node Naming**
+
+Assign descriptive names to nodes in the netlist, such as `VDD`, `GND`, `IN`, and `OUT`, to help SPICE reference and simulate each component clearly.
+
+![image](https://github.com/user-attachments/assets/bb9e2ba0-5180-436b-8749-24a7a49b1cdd)
+
+---
+
+## Model File
+
+Include the MOSFET model file specific to the fabrication technology. For instance, `tsmc_025um_model.mod` contains parameters for 0.25µm technology.
+
+Example:
+```spice
+.include tsmc_025um_model.mod
+```
+
+---
+
+## Simulation Commands
+
+### 1. **DC Analysis: Switching Threshold**
+
+The switching threshold (Vm) is a key voltage level where the inverter transitions between logic high and low states. Vm is identified when both transistors enter the saturation region, causing high leakage current due to concurrent conduction.
+
+#### Simulation Steps
+- **Load the Circuit**: Load the SPICE deck with the `.cir` extension.
+- **Run DC Analysis**: Perform a voltage sweep from 0V to 2.5V.
+- **Plot Results**: Plot `OUT` vs `IN` to observe the switching threshold.
+
+```spice
+source filename.cir
+run
+setplot dc1
+plot OUT vs IN
+```
+![image](https://github.com/user-attachments/assets/19001cda-6a74-40c8-8146-402c18956c79)
+
+Example DC sweep to find the switching threshold:
+```spice
+Vin IN 0 DC 0V
+.dc Vin 0 2.5 0.05
+```
+
+![image](https://github.com/user-attachments/assets/9178b978-af9e-46e3-830a-8e620a9f6174)
+
+### 2. **Transient Analysis: Propagation Delay**
+
+Transient analysis is used to calculate the propagation delay of the inverter by applying a pulse input signal.
+
+Example pulse signal for transient analysis:
+```spice
+Vin IN 0 pulse 0 2.5 0 10p 10p 1n 2n
+.tran 10p 4n
+```
+
+![image](https://github.com/user-attachments/assets/74c3f643-e113-4e54-9eb6-af97b28d834a)
+
+#### Simulation Steps
+- **Setup Input Pulse**: Define the pulse with specific rise and fall times and pulse width.
+- **Run Transient Analysis**: Perform the transient simulation to observe the inverter’s response.
+- **Plot Output**: Analyze `OUT` vs `time` to measure delay characteristics.
+
+---
+
+## Sample SPICE Deck
+
+Here is a complete SPICE deck for simulating a CMOS inverter, combining all the components discussed above:
+
+```spice
+*** CMOS Inverter SPICE Simulation ***
+
+* Device Netlist
+M1 OUT IN VDD VDD PMOS W=2u L=0.25u
+M2 OUT IN GND GND NMOS W=1u L=0.25u
+
+* Voltage Sources
+VDD VDD 0 DC 2.5V
+Vin IN 0 DC 0V
+
+* Model File
+.include tsmc_025um_model.mod
+
+* DC Analysis
+.dc Vin 0 2.5 0.05
+
+* Transient Analysis
+Vin IN 0 pulse 0 2.5 0 10p 10p 1n 2n
+.tran 10p 4n
+
+.end
+```
+
+### Interpreting Results
+- **Switching Threshold**: Observed at the Vm point, where leakage current peaks.
+- **Propagation Delay**: Determined from the transient plot, indicating the time required for output transitions.
+
+---
+
+## CMOS Custom Inverter Simulation
+
+### 1. Cloning and Setting Up Custom Inverter
+
+Clone the custom inverter library to use with the OpenLane toolchain:
+
+```bash
+cd Desktop/work/tools/openlane_working_dir/openlane
+git clone https://github.com/nickson-jose/vsdstdcelldesign
+cd vsdstdcelldesign
+cp /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech .
+magic -T sky130A.tech sky130_inv.mag &
+```
+
+
+![Screenshot 2024-11-13 170156](https://github.com/user-attachments/assets/f673e7f7-dc36-44eb-88f8-906b9d0fbcca)
+
+![Screenshot 2024-11-13 170230](https://github.com/user-attachments/assets/e7923460-288f-4ee8-86fc-469ccabb6d16)
+
+
+**Layout in Magic**:
+- Launch Magic with the custom `sky130_inv.mag` layout file.
+- Identify the components: `NMOS`, `PMOS`, output `Y`, and connections to `VDD` and `GND`.
+
+### 2. Inverter Layout and CMOS Fabrication Process
+
+#### CMOS Fabrication Process (16-Mask Method)
+
+The CMOS fabrication process involves a sequence of precise photolithographic and chemical procedures to form integrated circuits on a silicon wafer. This process consists of multiple layers and requires 16 photomasks to define and protect specific regions of the wafer at various stages. Each step is carefully managed to ensure that the final chips are both reliable and functionally accurate.
+
+1. **Substrate Preparation**: Begin with a cleaned, polished silicon wafer as the base material.
+2. **N-Well Formation**: Form N-well regions in the p-type substrate via ion implantation with phosphorus.
+3. **P-Well Formation**: Create P-well regions in n-type areas by implanting boron.
+4. **Gate Oxide Deposition**: Deposit a thin silicon dioxide layer to insulate between the gate and channel.
+5. **Polysilicon Deposition**: Apply a polysilicon layer that serves as the gate electrode.
+6. **Polysilicon Masking and Etching**: Mask and etch the polysilicon to shape the gate structures.
+7. **N-Well Masking and Implantation**: Define and implant N-well regions with phosphorus.
+8. **P-Well Masking and Implantation**: Define and implant P-well regions with boron.
+9. **Source/Drain Implantation**: Form source/drain regions by implanting dopants (e.g., arsenic for NMOS, boron for PMOS).
+10. **Gate Formation**: Use a mask to define and etch the gate structure.
+11. **Source/Drain Masking and Etching**: Etch to expose source/drain areas for subsequent processing.
+12. **Contact/Via Formation**: Etch holes to access source, drain, and gate areas for electrical connections.
+13. **Metal Deposition**: Deposit metal (e.g., aluminum or copper) to establish interconnections.
+14. **Metal Masking and Etching**: Mask and etch the metal layer to create the desired interconnect patterns.
+15. **Passivation Layer Deposition**: Apply a protective silicon dioxide or nitride layer over the wafer surface.
+16. **Final Testing and Packaging**: Test the wafer, separate functioning chips, and package them for use.
+
+![image](https://github.com/user-attachments/assets/057b8888-8fc6-4f72-93fe-831ebdff8cd7)
+
+#### Identification of Transistors in the Inverter
+
+In the Magic layout viewer, hover over the desired transistor and press `S` to select it. In the Magic terminal, type `what` to display information about the component type.
+
+**NMOS Transistor:**
+
+![Screenshot 2024-11-13 171951](https://github.com/user-attachments/assets/f58604d2-61fd-4ecc-8239-220d4fe8b266)
+
+**PMOS Transistor:**
+
+![Screenshot 2024-11-13 171919](https://github.com/user-attachments/assets/f035f8e5-e3be-451a-944d-6d1ec063d304)
+
+**Output Node - Y:**
+
+![Screenshot 2024-11-13 172044](https://github.com/user-attachments/assets/4ba7ee55-ca28-44b8-ace0-62fe11cc6b43)
+
+### 3. SPICE Extraction in Magic
+
+1. **Run SPICE Extraction Commands**:
+    In Magic’s tkcon window:
+   ```tcl
+    extract all
+    ext2spice cthresh 0 rthresh 0
+    ext2spice
+    ```
+   ![Screenshot 2024-11-13 171415](https://github.com/user-attachments/assets/df65aa13-d898-40ec-a888-61c6dbd3a3a3)
+
+2. **View SPICE File**:
+    The extracted SPICE file (`sky130_inv.spice`) includes transistor models and capacitances.
+    ```spice
+	* SPICE3 file created from sky130_inv.ext - technology: sky130A
+	
+	.option scale=10m
+	
+	.subckt sky130_inv A Y VPWR VGND
+	X0 Y A VGND VGND sky130_fd_pr__nfet_01v8 ad=1.44n pd=0.152m as=1.37n ps=0.148m w=35 l=23
+	X1 Y A VPWR VPWR sky130_fd_pr__pfet_01v8 ad=1.44n pd=0.152m as=1.52n ps=0.156m w=37 l=23
+	C0 VPWR Y 0.117f
+	C1 A Y 0.0754f
+	C2 A VPWR 0.0774f
+	C3 Y VGND 0.279f
+	C4 A VGND 0.45f
+	C5 VPWR VGND 0.781f
+	.ends
+    ```
+   ![Screenshot 2024-11-13 173112](https://github.com/user-attachments/assets/a994cda7-2130-4e66-9675-2e7b9c4e3378)
+
+### 4. Transient Response Analysis
+
+Modify the SPICE file to perform transient response analysis and determine propagation delay.
+
+Check the dimensions of the box.
+
+It is 0.01 microns. 
+update the spice file.
+
+```spice
+* SPICE3 file created from sky130_inv.ext - technology: sky130A
+
+.option scale=0.01u
+
+.include ./libs/pshort.lib
+.include ./libs/nshort.lib
+
+// .subckt sky130_inv A Y VPWR VGND
+
+M1000 Y A VGND VGND nshort_model.0 w=35 l=23
++  ad=1.44n pd=0.152m as=1.37n ps=0.148m
+M1001 Y A VPWR VPWR pshort_model.0 w=37 l=23
++  ad=1.44n pd=0.152m as=1.52n ps=0.156m
+
+VDD VPWR 0 3.3V
+VSS VGND 0 0V
+Va A VGND PULSE(0V 3.3V 0 0.1ns 0.1ns 2ns 4ns)
+
+C0 VPWR Y 0.117f
+C1 A Y 0.0754f
+C2 A VPWR 0.0774f
+C3 Y VGND 2f
+C4 A VGND 0.45f
+C5 VPWR VGND 0.781f
+// .ends
+
+
+.tran 1n 20n
+.control
+run
+.endc
+.end
+```
+![Screenshot 2024-11-13 173829](https://github.com/user-attachments/assets/48b846a4-4838-4304-8b94-229a8063891e)
+
+Run the modified file in ngspice:
+
+```bash
+ngspice sky130_inv.spice
+```
+![Screenshot 2024-11-13 174115](https://github.com/user-attachments/assets/0e4fdcbc-51b4-4454-a59c-d5918e0b332d)
+
+**Plot the Waveform**:
+```spice
+plot y vs time a
+```
+![Screenshot 2024-11-13 175427](https://github.com/user-attachments/assets/9c0ec37a-c2fc-4f58-b547-3aca1a5906cf)
+
+| Parameter           | Output                                                                                                                                                | Calculation                                       |
+|---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
+| **Rise Time**       | ![image](https://github.com/user-attachments/assets/2742ceaa-332d-4c80-9882-305e03cb4cb3)
+                                                           | 2.2403 ns - 2.17871 ns = 0.06159 ns              |
+| **Fall Time**       | ![image](https://github.com/user-attachments/assets/babb3168-40ff-4e09-8220-667a49913ca3)
+                                                          | 4.096 ns - 4.05075 ns = 0.04525 ns              |
+| **Cell Rise Delay** | ![Screenshot 2024-11-13 180725](https://github.com/user-attachments/assets/80c3d6e3-3078-461f-bea3-9feb61f3e77f)
+                                                  | 2.20556 ns - 2.15 ns = 0.05556 ns              |
+| **Cell Fall Delay** |  ![Screenshot 2024-11-13 180833](https://github.com/user-attachments/assets/b4d6db04-6d16-48c3-a9cc-0091dd0ce6b1)
+                                                | 4.07761 ns - 4.04776 ns = 0.02985 ns                 |
 
 
 
