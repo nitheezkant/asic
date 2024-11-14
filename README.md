@@ -426,5 +426,12 @@ Graphs:
 
 <img width="1207" alt="Screenshot 2024-11-04 at 11 45 31 PM" src="https://github.com/user-attachments/assets/d1a89d02-886a-4c53-8922-6b9872360e93">
 
+# Task 10
+# Day 1
+
+A **QFN-48 Package** (Quad Flat No-leads with 48 connections) is a type of IC packaging that places 48 metal connection pads around the perimeter of the chip without any protruding leads, creating a compact, low-profile package. This design offers high thermal efficiency and superior electrical performance, making it well-suited for densely packed applications where space is limited and effective heat dissipation is needed.
+
+
+![image](https://github.com/user-attachments/assets/16181d9a-b323-4d03-b7ca-c8128211a197)
 
 
