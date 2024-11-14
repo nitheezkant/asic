@@ -1145,16 +1145,30 @@ plot y vs time a
 ```
 ![Screenshot 2024-11-13 175427](https://github.com/user-attachments/assets/9c0ec37a-c2fc-4f58-b547-3aca1a5906cf)
 
-| Parameter           | Output                                                                                                                                                | Calculation                                       |
-|---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
-| **Rise Time**       | ![image](https://github.com/user-attachments/assets/2742ceaa-332d-4c80-9882-305e03cb4cb3)
-                                                           | 2.2403 ns - 2.17871 ns = 0.06159 ns              |
-| **Fall Time**       | ![image](https://github.com/user-attachments/assets/babb3168-40ff-4e09-8220-667a49913ca3)
-                                                          | 4.096 ns - 4.05075 ns = 0.04525 ns              |
-| **Cell Rise Delay** | ![Screenshot 2024-11-13 180725](https://github.com/user-attachments/assets/80c3d6e3-3078-461f-bea3-9feb61f3e77f)
-                                                  | 2.20556 ns - 2.15 ns = 0.05556 ns              |
-| **Cell Fall Delay** |  ![Screenshot 2024-11-13 180833](https://github.com/user-attachments/assets/b4d6db04-6d16-48c3-a9cc-0091dd0ce6b1)
-                                                | 4.07761 ns - 4.04776 ns = 0.02985 ns                 |
+
+ **Rise Time**     
+ 
+ ![image](https://github.com/user-attachments/assets/2742ceaa-332d-4c80-9882-305e03cb4cb3)
+
+ 2.2403 ns - 2.17871 ns = 0.06159 ns  
+ 
+**Fall Time**       
+
+![image](https://github.com/user-attachments/assets/babb3168-40ff-4e09-8220-667a49913ca3)
+
+4.096 ns - 4.05075 ns = 0.04525 ns     
+
+**Cell Rise Delay** 
+
+![Screenshot 2024-11-13 180725](https://github.com/user-attachments/assets/80c3d6e3-3078-461f-bea3-9feb61f3e77f)
+
+2.20556 ns - 2.15 ns = 0.05556 ns          
+
+**Cell Fall Delay** 
+
+![Screenshot 2024-11-13 180833](https://github.com/user-attachments/assets/b4d6db04-6d16-48c3-a9cc-0091dd0ce6b1)
+
+4.07761 ns - 4.04776 ns = 0.02985 ns                 
 
 
 
