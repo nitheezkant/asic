@@ -658,6 +658,198 @@ gedit 1-yosys_4.stat.rpt
 
 ```
 
+# Day 2 
+
+## **Core Concepts in IC Floorplanning**
+
+### 1. **Utilization Factor**
+The utilization factor is a crucial metric that compares the area occupied by the circuit (netlist) to the total core area of the chip. A higher utilization means more of the chip's area is used effectively, but over-utilization can lead to issues with routing and insufficient space for other essential components.
+
+Ideally, the utilization factor would be 1 (100%), but in practice, a range of **0.5 to 0.6** is preferred to allow for buffer zones, routing channels, and the flexibility needed for adjustments.
+
+#### **Utilization Factor Formula**:
+$$
+\text{Utilization Factor} = \frac{\text{Area Occupied by Netlist}}{\text{Total Core Area}}
+$$
+
+### 2. **Aspect Ratio**
+The aspect ratio defines the shape of the chip, calculated as the ratio of its height to width. An **aspect ratio of 1** results in a square shape, while any other value produces a rectangular layout. The ideal aspect ratio is influenced by factors like functionality, packaging, and manufacturing constraints.
+
+#### **Aspect Ratio Formula**:
+$$
+\text{Aspect Ratio} = \frac{\text{Height}}{\text{Width}}
+$$
+
+### **Pre-Placed Cells**
+Pre-placed cells are critical functional blocks, such as memory units, custom processors, and analog circuits, that are manually positioned in fixed locations during the floorplanning phase. These blocks are **vital to the chip's operation** and must remain in place during the placement and routing stages to ensure the chip functions correctly.
+
+### **Decoupling Capacitors**
+- **Purpose**: These capacitors are placed close to logic circuits to **smooth out power supply fluctuations** during high-speed switching events.
+- **Benefits**:
+  - Minimize **voltage fluctuations**
+  - Reduce **electromagnetic interference (EMI)**
+  - Ensure **reliable power delivery**, particularly to sensitive circuits
+
+### **Power Planning**
+Effective power planning in an IC ensures that **VDD and VSS** are evenly distributed across the chip through a **power mesh**. The goal is to maintain a stable power supply, minimize **voltage drops**, and optimize the chip’s overall **power efficiency**. Increasing the number of power and ground points reduces the risk of instability.
+
+### **Pin Placement**
+Proper placement of **I/O pins** is critical to the chip’s performance. Careful distribution of these pins helps to minimize signal integrity issues and reduces heat buildup, both of which contribute to the chip’s overall stability and manufacturability.
+
+---
+
+## **Floorplanning with OpenLANE**
+
+### 1. **Set Up OpenLANE**
+Begin by navigating to the OpenLANE directory and starting the interactive session:
+
+```bash
+cd Desktop/work/tools/openlane_working_dir/openlane
+docker
+```
+### 2. **Run OpenLANE Flow**
+To prepare the design (`picorv32a`) and begin the floorplanning process, execute the following commands:
+```bash
+./flow.tcl -interactive
+package require openlane 0.9
+prep -design picorv32a
+run_synthesis
+run_floorplan
+```
+![Screenshot 2024-11-13 141151](https://github.com/user-attachments/assets/762ce589-7b2f-4614-beca-846ddc2b6ec3)
+![Screenshot 2024-11-13 141232](https://github.com/user-attachments/assets/cee062c8-36fe-45d1-8c60-f26d825ac8dd)
+
+#### **Floorplan Results**:
+After running the commands, the floorplan results will be generated and saved in the OpenLANE output directory. You can visualize and analyze the results from there.
+
+### 3. **Floorplan Definition**
+Once the floorplan has been generated, you can inspect the `.def` file, which contains the detailed floorplan information:
+```bash
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/13-11_15-48/results/floorplan/
+gedit picorv32a.floorplan.def
+```
+
+![Screenshot 2024-11-13 143148](https://github.com/user-attachments/assets/311d2b28-f008-4a64-83e1-ad2021f21123)
+
+#### **Floorplan Calculation**:
+- **Unit Distance**: 1 micron = 1000 unit distance
+- **Die Dimensions**:
+  - **Width**: 660,685 unit distance → 660.685 microns
+  - **Height**: 671,405 unit distance → 671.405 microns
+- **Area of the Die**: 660.685 × 671.405 = 443,587.212 µm²
+
+### 4. **View Floorplan in Magic**
+To visualize the floorplan, use Magic:
+```bash
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/13-11_15-48/results/floorplan/
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.floorplan.def &
+```
+#### **Floorplan Visualizations**:
+Once the command runs, you’ll see a graphical representation of the chip layout in Magic, which shows how cells and components are placed.
+
+![Screenshot 2024-11-13 143259](https://github.com/user-attachments/assets/fb1a5892-0a8d-48ea-ae08-f9e174b31532)
+
+---
+
+## **Decap and Tap Cells**
+
+- **Decap Cells**: These cells are placed near logic cells to handle transient power supply fluctuations and stabilize the power delivery network. They help maintain consistent voltage levels during switching events.
+
+- **Tap Cells**: These are used to **connect to the power grid** and reduce **substrate noise** that can interfere with the chip's performance. Tap cells improve power distribution and minimize noise coupling within the substrate.
+- 
+![Screenshot 2024-11-13 144328](https://github.com/user-attachments/assets/98c243eb-3e75-4bde-84f5-a3cfc8cdcf7e)
+
+---
+
+## **Placement Process**
+
+### 1. **Unplaced Standard Cells**
+At the beginning of the placement process, cells are unplaced and located at the origin. These cells are not yet assigned specific positions and will be moved to their designated locations during the placement phase.
+
+![Screenshot 2024-11-13 144647](https://github.com/user-attachments/assets/c6ae7df7-5dd4-416d-b0d3-88cc13a5b514)
+
+### 2. **Run Placement**
+Once floorplanning is complete, execute the placement step to arrange the cells:
+```bash
+run_placement
+```
+### 3. **View Placement in Magic**
+Once placement is complete, you can view the result using Magic:
+
+```bash
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/13-11_15-48/results/placement/
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.placement.def &
+```
+
+![Screenshot 2024-11-13 145351](https://github.com/user-attachments/assets/9d13bc37-afe1-49bf-9b71-16636f4b1b50)
+
+
+#### **Placement Visualizations**:
+After executing the command, you will be able to see the visual representation of how the standard cells are arranged on the chip layout in Magic. This provides a clear view of the cell placement and their relative positions within the chip design.
+![Screenshot 2024-11-13 145447](https://github.com/user-attachments/assets/3b1701be-9cb8-47bf-8af3-eab5977904a8)
+
+---
+
+## **Cell Design and Characterization Flow**
+
+### 1. **Library Cells**
+A library consists of cells that define various functionalities, sizes, and electrical thresholds. These cells serve as the fundamental building blocks for creating an integrated circuit (IC).
+
+### 2. **Design Flow**:
+- **Inputs**: The design flow begins with inputs such as PDKs (Process Design Kits), SPICE models, DRC (Design Rule Check) and LVS (Layout vs. Schematic) checks, along with user-defined specifications.
+- **Steps**:
+  - **Circuit Design**: Define the logic and functionality of the circuit.
+  - **Layout Design**: Create the physical layout of the circuit based on the circuit design.
+  - **Parasitic Extraction**: Extract parasitic elements (e.g., capacitance, resistance) from the layout to model their impact on circuit performance.
+  - **Characterization**: Analyze the circuit’s timing, noise, and power characteristics to ensure it meets performance and reliability requirements.
+- **Outputs**:
+  - **CDL (Circuit Description Language)**, **LEF (Library Exchange Format)**, **GDSII** (a file format for chip layout), **SPICE Netlist**, and various characterization files like `.lib` for timing, noise, and power.
+
+---
+
+## **Standard Cell Characterization Flow**
+
+### 1. **Steps in Characterization**:
+- **Load Models and Tech Files**: These files provide process-specific details, including the behavior of devices and design rules.
+- **Extract Spice Netlist**: The circuit netlist is extracted from the design to enable detailed electrical analysis.
+- **Characterization with GUNA**: Using characterization tools like GUNA, the following models are generated:
+  - **Timing Models**: These describe the delays and propagation times for signals through the circuit.
+  - **Power Models**: These models estimate the power consumption of the circuit during operation.
+  - **Noise Models**: These models assess the noise characteristics and their impact on signal integrity.
+
+---
+
+## **Timing Parameters**
+
+| **Timing Parameter**         | **Value**          |
+|------------------------------|--------------------|
+| **Slew Low Rise Threshold**   | 20%                |
+| **Slew High Rise Threshold**  | 80%                |
+| **Slew Low Fall Threshold**   | 20%                |
+| **Slew High Fall Threshold**  | 80%                |
+| **Input Rise Threshold**      | 50%                |
+| **Input Fall Threshold**      | 50%                |
+| **Output Rise Threshold**     | 50%                |
+| **Output Fall Threshold**     | 50%                |
+
+### **Propagation Delay**:
+Propagation delay refers to the time it takes for an input signal to propagate through a logic gate or circuit and impact the output signal.
+
+$$
+\text{Rise Delay} = \text{time(out-fall-thr)} - \text{time(in-rise-thr)}
+$$
+
+### **Transition Time**:
+Transition time is the time required for a signal to transition between logic levels. It is typically measured between **10% and 90%** or **20% and 80%** of the signal’s full swing.
+
+$$
+\text{Fall Transition Time} = \text{time(slew-high-fall-thr)} - \text{time(slew-low-fall-thr)}
+$$
+
+$$
+\text{Rise Transition Time} = \text{time(slew-high-rise-thr)} - \text{time(slew-low-rise-thr)}
+$$
+
 
 
 
