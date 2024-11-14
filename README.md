@@ -1205,3 +1205,170 @@ spacing npres allpolynonres 480 touching_illegal \
 
 # Day 4
 
+### 1. **Extracting the `tracks.info` File**
+
+Navigate to the desired directory and use `less` to view the `tracks.info` file.
+
+```bash
+cd Desktop/work/tools/openlane_working_dir/openlane/vsdstdcelldesign
+cd ../../pdks/sky130A/libs.tech/openlane/sky130_fd_sc_hd/
+gedit tracks.info
+```
+![Screenshot 2024-11-13 190822](https://github.com/user-attachments/assets/67c69335-c62e-410f-bf41-0c85791ab031)
+
+### 2. **Setting Grid in tkcon for Local-Interconnect Layer**
+
+In the `tkcon` window, set the grid for the routing tracks on the local-interconnect layer:
+
+```tcl
+grid 0.46um 0.34um 0.23um 0.17um
+```
+![Screenshot 2024-11-13 191658](https://github.com/user-attachments/assets/94da1fd2-f7f0-4fa9-a281-3621aab478c7)
+
+
+This sets the pitch for the wires, aligning them with the required guidelines for the local-interconnect layer.
+
+### 3. **Saving and Opening Custom Layout Files**
+
+Save your design with a custom name, then open it with `magic`.
+
+```tcl 
+save sky130_achinv.mag
+magic -T sky130A.tech sky130_nitinv.mag &
+```
+
+now do
+
+```tcl
+lef write
+```
+
+![Screenshot 2024-11-13 192607](https://github.com/user-attachments/assets/d1ef6e67-51ff-441f-9958-5c5ad64c3b3f)
+![Screenshot 2024-11-13 192341](https://github.com/user-attachments/assets/bb3d06df-9c62-4b1d-a395-9290b6b94884)
+
+### 4. **Modifying `config.tcl` for the OpenLANE Flow**
+
+Modify the `config.tcl` file
+
+```tcl
+# Design
+set ::env(DESIGN_NAME) "picorv32a"
+
+set ::env(VERILOG_FILES) "./designs/picorv32a/src/picorv32a.v"
+set ::env(SDC_FILE) "./designs/picorv32a/src/picorv32a.sdc"
+
+set ::env(CLOCK_PERIOD) "5.000"
+set ::env(CLOCK_PORT) "clk"
+
+set ::env(CLOCK_NET) $::env(CLOCK_PORT)
+
+set ::env(LIB_SYNTH) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__typical.lib"
+set ::env(LIB_FASTEST) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__fast.lib"
+set ::env(LIB_SLOWEST) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__slow.lib"
+set ::env(LIB_TYPICAL) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__typical.lib"
+
+set ::env(EXTRA_LEFS) [glob $::env(OPENLANE_ROOT)/designs/$::env(DESIGN_NAME)/src/*.lef]
+
+set filename $::env(OPENLANE_ROOT)/designs/$::env(DESIGN_NAME)/$::env(PDK)_$::env(STD_CELL_LIBRARY)_config.tcl
+if { [file exists $filename] == 1 } {
+  source $filename
+}
+```
+![Screenshot 2024-11-13 193126](https://github.com/user-attachments/assets/5c689904-eb49-42d4-8221-bc2266a70aae)
+
+### 5. **Running the OpenLANE Flow**
+
+run the following
+
+```bash
+cd Desktop/work/tools/openlane_working_dir/openlane
+docker
+./flow.tcl -interactive
+```
+
+Add the LEF files
+
+```tcl
+package require openlane 0.9
+prep -design picorv32a
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+add_lefs -src $lefs
+run_synthesis
+```
+![Screenshot 2024-11-13 195709](https://github.com/user-attachments/assets/486eb8c4-2161-4b09-8cf4-f7103aecf9b4)
+
+
+### 6. **Fixing Slack**
+
+Configure the synthesis strategy and other synthesis parameters, then rerun to fix slack.
+
+```tcl
+./flow.tcl -interactive
+package require openlane 0.9
+prep -design picorv32a
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+add_lefs -src $lefs
+set ::env(SYNTH_STRATEGY) "DELAY 3"
+set ::env(SYNTH_SIZING) 1
+run_synthesis
+```
+
+![Screenshot 2024-11-13 200652](https://github.com/user-attachments/assets/edc535c8-71a4-43f8-bdee-1c40c97438f0)
+
+### 7. **Floorplanning**
+
+start the floorplan process
+
+```tcl
+run_floorplan
+```
+
+![Screenshot 2024-11-13 200803](https://github.com/user-attachments/assets/5a1831a1-1331-47fb-b102-101dd758a146)
+
+If you encounter issues, try:
+
+```tcl
+init_floorplan
+place_io
+tap_decap_or
+```
+
+### 8. **Placement**
+
+for placement:
+
+```tcl
+run_placement
+```
+### Viewing Placement in Magic
+
+in a new terminal and navigate to the following directory to view the placement in **Magic**:
+
+```bash
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/12-11_19-30/results/placement/
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.placement.def &
+```
+
+**Magic Output Example:**
+
+1. **Magic Placement Output**
+   ![Screenshot 2024-11-13 205711](https://github.com/user-attachments/assets/b7a990ca-0d99-4347-a949-8331c6d9b123)
+
+2. **Custom Inverter Cell Displayed in Magic**
+   ![Screenshot 2024-11-14 123151](https://github.com/user-attachments/assets/2a3d46a9-0a40-4dd0-9c4a-f862d3ce20dc)
+
+
+To view the specific inverter cell in Magic:
+- Select the cell by clicking on it.
+- In the console, type `expand`.
+
+**Expanded Inverter Cell:**
+	![Screenshot 2024-11-14 123352](https://github.com/user-attachments/assets/61f6d9ec-ca62-413a-8d84-40cbcd76d1d1)
+
+### 9. **Timing Analysis with Ideal Clocks Using OpenSTA**
+
+In pre-layout STA, clock buffer effects and net delays are considered, with wire delays estimated using the PDK library wire model. The initial synthesis run may exhibit notable timing violations, whereas an optimized timing run aims to achieve zero WNS (Worst Negative Slack). In this phase, we conduct timing analysis on the initial synthesis to identify potential optimization areas.
+
+![image](https://github.com/user-attachments/assets/1d3b411f-39ad-4da4-b4d5-202ceea01e5f)
+
+
