@@ -1170,5 +1170,38 @@ plot y vs time a
 
 4.07761 ns - 4.04776 ns = 0.02985 ns                 
 
+### 5. DRC Rules in Magic
 
+Perform DRC checks on the layout using the following commands
+
+1. **Download DRC Tests**:
+    ```bash
+    cd ~
+    wget http://opencircuitdesign.com/open_pdks/archive/drc_tests.tgz
+    tar xfz drc_tests.tgz
+    cd drc_tests
+    gvim .magicrc
+    ```
+![Screenshot 2024-11-13 181752](https://github.com/user-attachments/assets/1d9251b6-f19d-4519-9d5b-5bbaa5312570)
+![Screenshot 2024-11-13 182013](https://github.com/user-attachments/assets/b39aca59-6996-43c4-95b6-00912ead5882)
+
+Here we can observe that there is a DRC error. To resolve this, add the following commands to the `sky130A.tech` file:
+
+```
+spacing xhrpoly,uhrpoly,xpc allpolynonres 480 touching_illegal \
+	"xhrpoly/uhrpoly resistor spacing to diffusion < %d (poly.9)"
+spacing npres allpolynonres 480 touching_illegal \
+	"poly.resistor spacing to N-tap < %d (poly.9)"
+```
+![Screenshot 2024-11-13 182629](https://github.com/user-attachments/assets/356524d8-8645-4509-9b9d-f6e7af6098df)
+
+2. **Load and Check**:
+    ```tcl
+    tech load sky130A.tech
+    drc check
+    drc why
+    ```
+![Screenshot 2024-11-13 182916](https://github.com/user-attachments/assets/c8c5fb4d-7deb-4dfa-a87c-a32d9436db23)
+
+# Day 4
 
