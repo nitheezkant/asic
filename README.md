@@ -430,7 +430,7 @@ Graphs:
 
 <img width="1207" alt="Screenshot 2024-11-04 at 11 45 31 PM" src="https://github.com/user-attachments/assets/d1a89d02-886a-4c53-8922-6b9872360e93">
 
-</details>
+
 
 # Task 10: Advanced Physical Design using OpenLane using Sky130
 
@@ -1743,7 +1743,10 @@ report_checks -path_delay min_max -fields {slew trans net cap input_pins} -forma
 exit
 ```
 </details>
-## Task-13: OpenRoad Physical Design
+
+</details>
+
+# Task-13: OpenRoad Physical Design
 
 ### Path to Zetta-Scale Computing
 
