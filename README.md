@@ -2294,3 +2294,63 @@ git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD-flow-scri
 cd OpenROAD-flow-scripts
 sudo ./setup.sh
 ```
+![Screenshot from 2024-11-25 23-09-46](https://github.com/user-attachments/assets/c921b32a-9535-4046-b546-c743611d05e1)
+![Screenshot from 2024-11-25 23-25-47](https://github.com/user-attachments/assets/7d964850-9260-49cb-b64a-88ab0c9cbcb9)
+
+![Screenshot from 2024-11-26 00-23-28](https://github.com/user-attachments/assets/1b903174-7ada-4a52-99b5-d3cfcaf98c41)
+
+### Verify Installation
+
+```bash
+source ./env.sh
+yosys -help
+openroad -help
+cd flow
+make
+```
+![Screenshot from 2024-11-26 00-26-04](https://github.com/user-attachments/assets/a567802e-9468-45ea-abdd-a583259658ee)
+
+```bash
+make gui_final
+```
+
+![image](https://github.com/user-attachments/assets/1249b023-5e84-4493-8b31-b7c1b518c5a9)
+
+## **OpenROAD-flow-scripts Directory Breakdown**
+
+
+### 1. **`docker`**
+   - Contains setup scripts to create Docker containers for the OpenROAD environment.
+   - Ensures consistency across systems by providing pre-configured environments.
+
+### 2. **`docs`**
+   - Comprehensive documentation for using OpenROAD.
+   - Includes guides on installation, flow usage, debugging, and best practices.
+
+### 3. **`flow`**
+   - The core of the OpenROAD flow, managing the RTL-to-GDSII pipeline.
+   - Key components:
+     - **`design`**: Sample designs to test and demonstrate the end-to-end flow on various technology nodes.
+     - **`makefile`**: Automates flow execution, including synthesis, placement, routing, and GDSII generation.
+     - **`platform`**: Technology-specific resources such as standard cell libraries, LEF files, and design rules.
+     - **`tutorials`**: Hands-on guides for beginners and advanced users.
+     - **`util`**: Helper scripts for configuration and flow optimization.
+     - **`scripts`**: Automates individual flow steps, including synthesis, routing, and timing analysis.
+
+### 4. **`jenkins`**
+   - Includes configuration files and scripts for continuous integration testing.
+   - Automates regression tests to verify changes and maintain build stability.
+
+### 5. **`tools`**
+   - Hosts binaries and dependencies for running various flow stages:
+     - Synthesis tools
+     - Placement and routing tools
+     - Timing analysis and design rule checking utilities
+
+### 6. **`etc`**
+   - Miscellaneous setup files and dependency installers.
+   - Includes environment initialization scripts for first-time setup.
+
+### 7. **`setup_env.sh`**
+   - Configures environment variables and paths required to run OpenROAD flow.
+   - Ensures seamless interaction between the tools, libraries, and scripts in the flow.
