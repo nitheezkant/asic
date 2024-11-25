@@ -2149,7 +2149,6 @@ The bar chart on the left shows the evolution of the effective capacitance (\(C_
   
 ### **Direct Source-to-Drain Tunneling and the Role of MoS₂ in Minimizing Leakage**
 
-![image](https://github.com/user-attachments/assets/fde92117-2707-40c6-92ea-2ebce30bff49)
 
 As gate lengths (\(L_G\)) in MOSFETs decrease, direct tunneling of electrons from the source to the drain becomes more pronounced, significantly increasing leakage currents. This phenomenon is influenced by material properties, such as the effective mass (\(m^*\)) and bandgap (\(E_G\)) of the material. 
 
@@ -2202,3 +2201,96 @@ The All-2D MOSFET exhibits exceptional electrical performance:
 - **Output Characteristics (I\(_D\) vs V\(_{DS}\))**: The device shows smooth current modulation with increasing gate voltage (V\(_G\)) and drain-source voltage (V\(_{DS}\)), indicating stable output performance.
 - **Mobility**: The field-effect mobility remains consistent with increasing gate electric field, indicating minimal scattering and high-quality interfaces within the 2D materials stack.
 ![image](https://github.com/user-attachments/assets/0bee99b6-c4e8-452c-a1ed-80d500c6b0eb)
+
+This demonstrates the potential of all-2D MOSFETs to push the limits of transistor technology, providing high performance and scalability for next-generation electronic devices.
+
+### **Potential of 2D Materials in High-Performance Transistor Applications**
+
+The advancements in transistor technology underscore the significant potential of 2D materials such as MoS₂, graphene, and h-BN for scaling and improving the performance of future electronic devices.
+
+---
+
+### **Non-Planar Transistor Design**
+
+The diagram in the top left illustrates a non-planar transistor, highlighting key components:
+
+- **Gate**: Controls current flow through the channel.
+- **Channel**: The region through which current flows from the source (S) to the drain (D).
+- **Body**: The underlying region connected to the substrate.
+- **STI (Shallow Trench Isolation)**: Provides electrical insulation between neighboring devices.
+
+The primary challenge in non-planar transistor design lies in the difficulty of forming single-crystalline semiconductors on a non-planar surface using traditional semiconductor fabrication methods.
+
+---
+
+### **CMOS Design Evolution: Single-Layer vs. Monolithic 3D CMOS**
+
+![image](https://github.com/user-attachments/assets/8548e5c4-04c8-4c5e-8edd-82e8ed24ee6b)
+
+- **Single-Layer CMOS (a)**: This is the conventional CMOS design, where NMOS and PMOS transistors are fabricated on a single silicon layer. All devices are positioned within the same planar layer, with lateral connections.
+  
+- **Monolithic 3D CMOS (b)**: In this advanced design, NMOS and PMOS transistors are stacked in two separate layers, one on top of the other, separated by an oxide layer. This 3D integration reduces the device footprint, enables higher transistor density, and enhances performance by reducing interconnect lengths.
+  
+- **Single-Layer CMOS Logic (c)**: Traditional logic gates such as inverters, 2-input NAND, and 2-input NOR gates are built using single-layer CMOS. These gates require more space for interconnections due to their horizontal layout.
+  
+- **Monolithic 3D CMOS Logic (d)**: Logic gates in this design are constructed using two transistor layers, leading to reduced area for interconnections. The vertical integration improves performance by minimizing delay and shortening signal paths.
+
+![image](https://github.com/user-attachments/assets/c6da7707-e7b0-402c-8e59-fe34856c009d)
+
+---
+
+### **Advanced Interconnect Technologies for 7nm and Beyond**
+
+- **Dual Damascene Cu** (7nm technology node with a 36nm pitch): This technique combines the creation of both vias (vertical connections) and lines (horizontal connections) into a single patterning step. Copper (Cu) is used for interconnects, but challenges such as gap filling and maintaining reliability become more prominent as dimensions shrink.
+  
+- **Single Damascene Cu** (5nm technology node with a 28nm pitch): This method splits the creation of vias and lines into separate steps to address scaling challenges. The focus is on reducing resistance in both lines and vias to maintain optimal performance at smaller dimensions.
+  
+- **Barrier and Via Metal Optimization** (3nm technology node with a 20-24nm pitch): This approach focuses on reducing the thickness of barrier layers (insulating layers) to minimize resistance while maintaining reliable via connections. It is crucial for meeting the performance demands of advanced technology nodes.
+
+- **Subtractive RIE and Ruthenium (Ru) for Sub-18nm Pitches**: Subtractive Reactive Ion Etching (RIE) and the use of alternative metals like ruthenium (Ru) address the reliability and scaling challenges of traditional copper interconnects. This technique allows for more precise patterning, while ruthenium provides improved performance at advanced nodes.
+
+- **Post-Damascene Interconnects for Nodes Below 15nm**: For future technology nodes with pitches below 15nm, post-Damascene interconnects featuring tall, barrier-less designs are envisioned. This approach improves electromigration (EM) reliability, ensuring durable and robust connections as dimensions continue to shrink.
+
+---
+
+### **Selective Barrier in Copper Interconnects**
+
+The image demonstrates the use of a selective barrier, typically **tantalum nitride (TaN)**, to improve copper interconnects in semiconductor manufacturing. This barrier plays a crucial role by:
+
+- **Reducing Resistance**: TaN helps minimize the electrical resistance in copper interconnects, improving overall device performance.
+- **Enhancing Reliability**: The barrier prevents copper ion migration, which can lead to reliability issues like electromigration, ensuring the long-term stability of interconnects.
+- **Controlling Copper Thickness**: By controlling the copper thickness, the barrier optimizes the interconnect structure for advanced nodes.
+
+The process involves cleaning the copper surface, depositing TaN using atomic layer deposition (ALD), and removing sacrificial layers, making it an essential technique for advancing semiconductor technology.
+
+This collection of innovations showcases how cutting-edge materials and fabrication techniques are paving the way for the next generation of high-performance, scalable transistor technologies.
+
+---
+
+### **Back-Side Power Delivery Network (BS-PDN)**
+
+![image](https://github.com/user-attachments/assets/83c94bb2-9591-4422-9c4b-c7af17b070d3)
+
+In advanced semiconductor manufacturing, power delivery efficiency is crucial to ensuring high performance and reliability of integrated circuits (ICs). Traditional **Front-Side Power Delivery Networks (FS-PDNs)** often experience issues such as excessive IR-drop, which can lead to reduced device performance and potential long-term reliability concerns. The adoption of **Back-Side Power Delivery Networks (BS-PDNs)** offers a solution to these challenges.
+
+BS-PDNs route the power supply rails on the backside of the chip, instead of the front side. This configuration provides several advantages:
+
+- **Reduced IR-Drop**: BS-PDNs lower the voltage drop across the power delivery network, ensuring more stable and efficient power distribution. This results in enhanced performance and reliability.
+  
+- **Smaller Standard Cell Area**: With more efficient power delivery, the area required for standard cells is reduced. This allows for higher chip density and more compact designs.
+
+- **Enhanced Performance**: The reduction in IR-drop leads to faster switching speeds, lower power dissipation, and better operational efficiency, which improves overall device performance.
+
+BS-PDNs contribute to the development of high-performance, energy-efficient integrated circuits that meet the needs of modern electronics, offering significant benefits in terms of performance, power consumption, and chip density.
+
+---
+
+### **Installing and Setting Up ORFS (OpenROAD Flow Scripts)**
+
+To begin working with the OpenROAD flow, follow these steps to clone the repository and set up the environment:
+
+```bash
+git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD-flow-scripts
+cd OpenROAD-flow-scripts
+sudo ./setup.sh
+```
